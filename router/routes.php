@@ -2,28 +2,10 @@
 
 use app\controllers\AuthController;
 use app\controllers\MainController;
-use app\src\middlewares\AuthMiddleware;
 use app\src\Router;
 
-//Router::get('/home', 'home');
 Router::get('/about', static function () {
-//	$user = \app\src\DB::table('users')
-//		->select(['id', 'firstname'])
-//		->getAll();
-//	var_dump($user);
-//	var_dump($users);
-//	$users = \app\src\DB::table('people')
-//		->id()
-//		->string('firstname')->notNull()
-//		->int('age')
-//		->string('lastname')->notNull()
-//		->timestamp('created_at')->default('CURRENT_TIMESTAMP')
-//		->create();
-//	\app\src\DB::table('people')
-//		->insert(['firstname' => 'John2', 'lastname' => 'Doe2', 'age' => 26]);
-//	\app\src\DB::table('people')->dropColumn('occupation');
-//	$users = \app\src\DB::table('people')->drop();
-
+	echo 'About page';
 });
 Router::get('/register', [AuthController::class, 'index']);
 Router::post('/register', [AuthController::class, 'register']);

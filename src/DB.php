@@ -13,7 +13,8 @@ class DB
 	{
 		if (!self::$instance) {
 			self::$instance = new Database([
-				'dsn' => $_ENV['DB_DSN'],
+				'dsn' => $_ENV['DB_TYPE'] . ':host=' . $_ENV['DB_HOST'] . ';port=' . $_ENV['DB_PORT'] . ';dbname='
+					. $_ENV['DB_NAME'],
 				'user' => $_ENV['DB_USER'],
 				'password' => $_ENV['DB_PASSWORD']
 			]);
