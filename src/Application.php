@@ -2,6 +2,9 @@
 
 namespace app\src;
 
+use app\models\User;
+use Dotenv\Dotenv;
+
 class Application
 {
 	public Router $router;
@@ -11,28 +14,39 @@ class Application
 	public Database $db;
 	public Session $session;
 	public ?Model $user;
-	public string $userClass;
 	public Controller $controller;
-	public function __construct(string $rootPath, array $config)
+	public function __construct(string $rootPath, bool $migration = false)
 	{
-		$this->userClass = $config['userClass'];
+		$dotenv = Dotenv::createImmutable($rootPath);
+		$dotenv->load();
+		$config = [
+			'userClass' => User::class,
+			'db' => [
+				'dsn' => $_ENV['DB_TYPE'] . ':host=' . $_ENV['DB_HOST'] . ';port=' . $_ENV['DB_PORT'] . ';dbname='
+					. $_ENV['DB_NAME'],
+				'user' => $_ENV['DB_USER'],
+				'password' => $_ENV['DB_PASSWORD']
+			]
+		];
+
 		self::$app = $this;
 		self::$ROOT_DIR = $rootPath;
 		$this->router = new Router();
-		$this->migration = new Migration($config['db']);
+		!$migration ?: $this->migration = new Migration();
 		$this->db = new Database($config['db']);
 		$this->session = new Session();
 
 		$primaryValue = $this->session->get('user');
+		$userClass = $config['userClass'];
 		if ($primaryValue) {
-			$primaryKey = $this->userClass::primaryKey();
-			$this->user = $this->userClass::findOne([$primaryKey => $primaryValue]);
+			$primaryKey = $userClass::primaryKey();
+			$this->user = $userClass::findOne([$primaryKey => $primaryValue]);
 		} else {
 			$this->user = null;
 		}
 	}
 
-	public static function isGuest()
+	public static function isGuest(): bool
 	{
 		return !self::$app->user;
 	}
@@ -56,7 +70,7 @@ class Application
 		return true;
 	}
 
-	public function logout()
+	public function logout(): void
 	{
 		$this->user = null;
 		$this->session->remove('user');
