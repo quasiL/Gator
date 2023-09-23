@@ -9,6 +9,7 @@ $dotenv = Dotenv\Dotenv::createImmutable($rootPath);
 $dotenv->load();
 
 $config = [
+	'userClass' => app\models\User::class,
 	'db' => [
 		'dsn' => $_ENV['DB_DSN'],
 		'user' => $_ENV['DB_USER'],
@@ -17,10 +18,4 @@ $config = [
 ];
 $app = new Application($rootPath, $config);
 
-if (isset($argc, $argv[1])) {
-	for ($i = 1; $i < $argc; $i++) {
-		$app->migration->dropMigration($argv[$i]);
-	}
-} else {
-	$app->migration->applyMigrations();
-}
+$app->migration->applyMigrations();

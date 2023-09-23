@@ -1,27 +1,23 @@
 <?php
 
-use app\src\Application;
+use app\src\DB;
 
 class m0001_initial
 {
-	public function up()
+	public function up(): void
 	{
-		$db = Application::$app->migration;
-		$SQL = "CREATE TABLE users (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                email VARCHAR(255) NOT NULL,
-                firstname VARCHAR(255) NOT NULL,
-                lastname VARCHAR(255) NOT NULL,
-                status TINYINT DEFAULT 0,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )  ENGINE=INNODB;";
-		$db->pdo->exec($SQL);
+		DB::table('users')
+			->id()
+			->string('email')->notNull()
+			->string('firstname')->notNull()
+			->string('lastname')->notNull()
+			->int('status')
+			->timestamp('created_at')->default('CURRENT_TIMESTAMP')
+			->create();
 	}
 
-	public function down()
+	public function down(): void
 	{
-		$db = Application::$app->migration;
-		$SQL = "DROP TABLE users;";
-		$db->pdo->exec($SQL);
+		DB::table('users')->drop();
 	}
 }

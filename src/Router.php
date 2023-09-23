@@ -9,7 +9,6 @@ use app\src\middlewares\DefaultMiddleware;
 class Router
 {
 	private static array $routes = [];
-	private array $registeredMiddlewares = [];
 	private Request $request;
 	public Response $response;
 

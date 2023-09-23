@@ -2,17 +2,19 @@
 
 namespace app\src;
 
+use PDO;
+
 class Migration
 {
-	public \PDO $pdo;
+	public PDO $pdo;
 
 	public function __construct(array $config)
 	{
 		$dsn = $config['dsn'] ?? '';
 		$user = $config['user'] ?? '';
 		$password = $config['password'] ?? '';
-		$this->pdo = new \PDO($dsn, $user, $password);
-		$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+		$this->pdo = new PDO($dsn, $user, $password);
+		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 
 	public function applyMigrations(): void
@@ -39,51 +41,30 @@ class Migration
 		if (!empty($newMigrations)) {
 			$this->saveMigrations($newMigrations);
 		} else {
-			$this->log('All migrations are applied');
+			echo 'All migrations are applied' . PHP_EOL;
 		}
 	}
 
-	public function dropMigration($migration)
+	private function createMigrationsTable(): void
 	{
-		require_once Application::$ROOT_DIR . '/migrations/' . $migration;
-		$className = pathinfo($migration, PATHINFO_FILENAME);
-		$instance = new $className;
-		echo 'Dropping migration ' . $migration . PHP_EOL;
-		$instance->down();
-		echo 'Dropped migration ' . $migration . PHP_EOL;
+		DB::table('migrations')
+			->id()
+			->string('migration')->notNull()
+			->timestamp('created_at')->default('CURRENT_TIMESTAMP')->notNull()
+			->create();
 	}
 
-	public function createMigrationsTable(): void
+	private function getAppliedMigrations()
 	{
-		$this->pdo->exec("CREATE TABLE IF NOT EXISTS migrations (
-    		id INT AUTO_INCREMENT PRIMARY KEY,
-    		migration VARCHAR(255),
-			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    	) ENGINE=INNODB;");
+		return DB::table('migrations')
+			->select(['migration'])
+			->getAll(\PDO::FETCH_COLUMN);
 	}
 
-	protected function getAppliedMigrations()
+	private function saveMigrations(array $migrations): void
 	{
-		$statement = $this->pdo->prepare("SELECT migration FROM migrations");
-		$statement->execute();
-
-		return $statement->fetchAll(\PDO::FETCH_COLUMN);
-	}
-
-	protected function saveMigrations(array $migrations)
-	{
-		$str = implode(',', array_map(fn($m) => "('$m')", $migrations));
-		$statement = $this->pdo->prepare("INSERT INTO migrations (migration) VALUES $str");
-		$statement->execute();
-	}
-
-	public function prepare($sql)
-	{
-		return $this->pdo->prepare($sql);
-	}
-
-	protected function log($message)
-	{
-		echo '[' . date('Y-m-d H:i:s') . '] - ' . $message . PHP_EOL;
+		foreach ($migrations as $migration) {
+			DB::table('migrations')->insert(['migration' => $migration]);
+		}
 	}
 }
