@@ -1,17 +1,17 @@
 <?php
 
-use app\src\Application;
+use app\src\DB;
 
 class m0002_add_password_column {
-	public function up()
+	public function up(): void
 	{
-		$db = Application::$app->migration;
-		$db->pdo->exec("ALTER TABLE users ADD COLUMN password VARCHAR(512) NOT NULL");
+		DB::table('users')
+			->string('password')->notNull()
+			->modify();
 	}
 
-	public function down()
+	public function down(): void
 	{
-		$db = Application::$app->migration;
-		$db->pdo->exec("ALTER TABLE users DROP COLUMN password");
+		DB::table('users')->dropColumn('password');
 	}
 }

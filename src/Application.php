@@ -10,7 +10,7 @@ class Application
 	public Migration $migration;
 	public Database $db;
 	public Session $session;
-	public ?DbModel $user;
+	public ?Model $user;
 	public string $userClass;
 	public Controller $controller;
 	public function __construct(string $rootPath, array $config)
@@ -47,7 +47,7 @@ class Application
 		}
 	}
 
-	public function login(DbModel $user)
+	public function login(Model $user)
 	{
 		$this->user = $user;
 		$primaryKey = $user->primaryKey();
