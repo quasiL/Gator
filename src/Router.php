@@ -18,7 +18,7 @@ class Router
 		$this->response = new Response();
 	}
 
-	public static function get($path, $callback)
+	public static function get($path, $callback): void
 	{
 		self::$routes['get'][$path] = $callback;
 	}
@@ -28,6 +28,46 @@ class Router
 		self::$routes['post'][$path] = $callback;
 	}
 
+	private function getCallback()
+	{
+		$method = $this->request->method();
+		$url = $this->request->getUrl();
+		$url = trim($url, '/');
+		$url = substr(strstr($url, 'Gator/public/'), strlen('Gator/public/'));
+
+		$routes = self::$routes[$method] ?? [];
+		$routeParams = false;
+		foreach ($routes as $route => $callback) {
+			$route = trim($route, '/');
+			$routeNames = [];
+			if (!$route) {
+				continue;
+			}
+			if (preg_match_all('/\{(\w+)(:[^}]+)?}/', $route, $matches)) {
+				$routeNames = $matches[1];
+			}
+
+			$routeRegex = "@^" . preg_replace_callback('/\{\w+(:([^}]+))?}/',
+					static fn($m) => isset($m[2]) ? "({$m[2]})" : '(\w+)', $route) . "$@";
+
+			if (preg_match_all($routeRegex, $url, $valueMatches)) {
+
+				$values = [];
+				for ($i = 1, $iMax = count($valueMatches); $i < $iMax; $i++) {
+					$values[] = $valueMatches[$i][0];
+				}
+				$routeParams = array_combine($routeNames, $values);
+
+				$this->request->setRouteParams($routeParams);
+				return $callback;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @throws NotFoundException
+	 */
 	public function resolve()
 	{
 		$path =$this->request->getPath();
@@ -35,7 +75,10 @@ class Router
 		$callback = self::$routes[$method][$path] ?? false;
 
 		if (!$callback) {
-			throw new NotFoundException();
+			$callback = $this->getCallback();
+			if ($callback === false) {
+				throw new NotFoundException();
+			}
 		}
 		if (is_string($callback)) {
 			$this->renderView($callback);

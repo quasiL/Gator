@@ -4,6 +4,7 @@ namespace app\src;
 
 class Request
 {
+	private array $routeParams = [];
 	public function getPath(): false|string
 	{
 		$separator = explode('/', $_SERVER['REQUEST_URI'] ?? '/');
@@ -13,6 +14,15 @@ class Request
 			return $path;
 		}
 		return substr($path, 0, $position);
+	}
+
+	public function getUrl() {
+		$path = $_SERVER['REQUEST_URI'];
+		$position = strpos($path, '?');
+		if ($position !== false) {
+			$path = substr($path, 0, $position);
+		}
+		return $path;
 	}
 
 	public function method(): string
@@ -44,5 +54,16 @@ class Request
 			}
 		}
 		return $body;
+	}
+
+	public function setRouteParams($params): static
+	{
+		$this->routeParams = $params;
+		return $this;
+	}
+
+	public function getRouteParams(): array
+	{
+		return $this->routeParams;
 	}
 }
