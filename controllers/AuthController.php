@@ -75,8 +75,8 @@ class AuthController extends Controller
 		return $this->render('login', ['model' => new LoginForm()]);
 	}
 
-	public function profile()
+	public function profile(Request $request)
 	{
-		return $this->render('profile');
+		return $this->render('profile', ['id' => $request->getRouteParams()['id'], 'username' => $request->getRouteParams()['username']]);
 	}
 }

@@ -15,4 +15,4 @@ Router::post('/login', [AuthController::class, 'loginPost']);
 Router::get('/logout', [AuthController::class, 'logout']);
 
 Router::get('/contact', [MainController::class, 'index']);
-Router::get('/profile', [AuthController::class, 'profile']);
+Router::get('/profile/{id:\d+}/{username}', [AuthController::class, 'profile']);
