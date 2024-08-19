@@ -1,0 +1,19 @@
+{
+    "name": "quasi/gator",
+    "description": "MVC framework",
+    "autoload": {
+        "psr-4": {
+            "Gator\\": "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "quasi"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.5",
+        "ext-pdo": "*",
+        "guzzlehttp/psr7": "^2.7"
+    }
+}
