@@ -11,15 +11,25 @@ learning the fundamentals of web application architecture.
 for mapping URLs to controller actions. This approach eliminates the need for external route registration files, 
 allowing you to define routes directly within your controller methods. For example:
 ```php
-#[Route('/about', 'GET')]
-public function getAbout(HttpRequest $request, HttpResponse $response)
+use Gator\Core\Attributes\Route;
+use Gator\Core\Controller;
+use Gator\Core\Http\HttpRequest;
+use Gator\Core\Http\HttpResponse;
+
+class TestController extends Controller
 {
-    $this->render('about', []);
+    #[Route('/about', 'GET')]
+    public function getAbout(HttpRequest $request, HttpResponse $response)
+    {
+        $this->render('about', []);
+    }
 }
 ```
 - [x] **Query Builder**: Introducing *Burt*, a convenient and intuitive query builder for streamlined database 
 interactions. With *Burt*, you can easily construct complex queries in a clean and readable manner. For example:
 ```php
+use Gator\Core\Database\Burt;
+
 $users = Burt::table('users')
     ->select()
     ->where('status', '=', 1)
