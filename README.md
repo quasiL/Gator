@@ -39,3 +39,43 @@ php migrations.php rollback
 - [ ] **Validation**
 - [ ] **Middleware Support**
 - [ ] **Documentation**
+
+## How to Start
+
+To get started with the framework, follow these steps:
+
+1. Set Up Environment Variables:
+* Copy the example environment file to create your own `.env` file:
+```
+cp .env.example .env
+```
+* Review the `.env` file and update the settings as needed. Ensure the environment variables align with the 
+configuration in your `docker-compose.yaml` file. You can adjust the values in either file to suit your setup.
+
+2. Build and Start the Docker Environment:
+* Use Docker Compose to build and start the development environment, which includes an Apache web server and 
+a MySQL database:
+```
+docker-compose up --build
+```
+
+3. Run Migrations:
+* To apply database migrations, you need to execute the migration commands inside the web server container:
+```
+docker-compose exec webserver bash
+```
+* Once inside the container, navigate to the gator directory:
+```
+cd gator
+```
+* Run the migrations to set up your database schema:
+```
+php migrations.php migrate
+```
+
+4. Access the Application:
+* Once the containers are up and running, open your web browser and navigate to:
+```
+http://localhost:8080/gator/public/<route_name>
+```
+Replace <route_name> with the specific route you want to access.
