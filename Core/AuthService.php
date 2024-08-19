@@ -3,7 +3,6 @@
 namespace Gator\Core;
 
 use Delight\Auth\Auth;
-use Delight\Auth\AuthError;
 use Delight\Auth\InvalidEmailException;
 use Delight\Auth\InvalidPasswordException;
 use Delight\Auth\TooManyRequestsException;
@@ -28,7 +27,6 @@ class AuthService
         }
         return self::$auth;
     }
-
 
     /**
      * Register new user without email confirmation

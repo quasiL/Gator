@@ -4,7 +4,14 @@ namespace Gator\Core;
 
 abstract class Controller
 {
-    public function render(string $view, array $data = []): void
+    /**
+     * Renders a view
+     *
+     * @param string $view The name of the view
+     * @param array $data The data to be passed to the view
+     * @return void
+     */
+    public final function render(string $view, array $data = []): void
     {
         extract($data);
         ob_start();

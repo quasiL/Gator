@@ -28,8 +28,10 @@ class TestController extends Controller
 - [x] **Query Builder**: Introducing *Burt*, a convenient and intuitive query builder for streamlined database 
 interactions. With *Burt*, you can easily construct complex queries in a clean and readable manner. For example:
 ```php
+use Gator\Backend\Models\User;
 use Gator\Core\Database\Burt;
 
+/** @var array<User>|null $users */
 $users = Burt::table('users')
     ->select()
     ->where('status', '=', 1)
@@ -40,6 +42,25 @@ Use simple commands to apply or rollback migrations:
 ```
 php migrations.php migrate
 php migrations.php rollback
+```
+
+- [x] **Authentication System**: An authentication system is implemented using the `delight-im/auth` library, 
+which provides secure user authentication and session management. The system supports user registration, 
+login, and logout operations.
+```php
+use Gator\Core\AuthService;
+
+$result = AuthService::registerWithoutEmailConfirmation([
+    'email'    => 'user@example.com',
+    'password' => 'securepassword',
+    'username' => 'username'
+]);
+
+if ($result['success']) {
+    echo "Registration successful. User ID: " . $result['userId'];
+} else {
+    echo "Registration failed: " . $result['error'];
+}
 ```
 
 ## Upcoming Features
@@ -124,14 +145,26 @@ Replace <route_name> with the specific route you want to access.
 ## Required Libraries
 
 * `vlucas/phpdotenv`:
-This library is used to load environment variables from your .env file into the application. 
-It helps manage configuration settings in a consistent way across different environments.
+This library is used to load environment variables from the `.env` file into the application. 
+It helps manage configuration settings in a consistent way across different environments, ensuring that 
+sensitive information, such as database credentials, is kept out of the codebase.  
+  
 
 * `ext-pdo`:
-PDO (PHP Data Objects) is a database access layer providing a uniform method of access to multiple databases. 
-It is required for interacting with your database in a secure and consistent manner.
+PDO (PHP Data Objects) is a database access layer that provides a uniform method of access to multiple databases. 
+It is essential for interacting with the database in a secure and consistent manner, supporting prepared 
+statements that help prevent SQL injection attacks.
+
 
 * `guzzlehttp/psr7`:
-  Guzzle's PSR-7 implementation is used for creating and working with HTTP requests and responses according to 
+Guzzle's PSR-7 implementation is used for creating and working with HTTP requests and responses according to 
 PSR-7 (HTTP message interfaces) and PSR-12 (HTTP middleware specification). This ensures compatibility with other 
-libraries and frameworks that adhere to these standards.
+libraries and frameworks that adhere to these standards, enabling smooth integration and extensibility 
+within the application.
+
+
+* `delight-im/auth`:
+This library is a comprehensive authentication solution for PHP, handling user registration, login, logout, 
+and session management. It simplifies the implementation of authentication features within the application, 
+offering secure methods for password handling, email verification, and account recovery. 
+By using this library, the application adheres to best practices for user authentication and security.

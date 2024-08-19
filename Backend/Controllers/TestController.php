@@ -26,12 +26,12 @@ class TestController extends Controller
     #[Route('/about', 'GET')]
     public function getAbout(HttpRequest $request, HttpResponse $response)
     {
+        /** @var array<User> $users */
         $users = Burt::table('users')
             ->select()
             ->where('username', '=', 'user')
             ->getAll();
-//        $response->view('about', new ViewModel([
-//            'users' => $users
-//        ]));
+
+        $this->render('home', ['data' => $users, 'title' => 'About']);
     }
 }

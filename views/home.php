@@ -1,13 +1,12 @@
-<?php /** @var ViewModel $viewModel */ use Gator\Core\ViewModel; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $viewModel->getTableName() ?></title>
+    <title><?= $title ?></title>
 </head>
 <body>
-<p>hello</p>
+<p>User <?= var_dump($data) ?></p>
 </body>
 </html>
 
