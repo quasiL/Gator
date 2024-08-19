@@ -9,7 +9,7 @@ use ReflectionClass;
 class Router
 {
     private HttpRequest $request;
-    public HttpResponse $response;
+    private HttpResponse $response;
     private string $controllersPath;
 
     public function __construct()

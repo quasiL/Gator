@@ -2,6 +2,7 @@
 
 namespace Gator\Core\Database;
 
+use Gator\Core\Application;
 use InvalidArgumentException;
 use PDO;
 use PDOException;
@@ -261,5 +262,17 @@ class DBHandler
         $this->fields = [];
         $this->wheres = [];
         $this->createdFields = [];
+    }
+
+    public function createAuthTables(): void
+    {
+        try {
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sqlFilePath = Application::$rootPath . '/init.sql';
+            $sql = file_get_contents($sqlFilePath);
+            $this->pdo->exec($sql);
+        } catch (PDOException $e) {
+            echo "Error creating Auth tables: " . $e->getMessage();
+        }
     }
 }

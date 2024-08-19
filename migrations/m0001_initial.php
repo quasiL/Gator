@@ -6,18 +6,17 @@ class m0001_initial
 {
     public function up(): void
     {
-        Burt::table('users')
-            ->id()
-            ->string('email')->notNull()
-            ->string('firstname')->notNull()
-            ->string('lastname')->notNull()
-            ->int('status')
-            ->timestamp('created_at')->default('CURRENT_TIMESTAMP')
-            ->create();
+        Burt::createAuthTables();
     }
 
     public function down(): void
     {
         Burt::table('users')->drop();
+        Burt::table('users_2fa')->drop();
+        Burt::table('users_confirmations')->drop();
+        Burt::table('users_otps')->drop();
+        Burt::table('users_remembered')->drop();
+        Burt::table('users_resets')->drop();
+        Burt::table('users_throttling')->drop();
     }
 }

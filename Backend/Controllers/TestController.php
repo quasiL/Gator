@@ -28,7 +28,7 @@ class TestController extends Controller
     {
         $users = Burt::table('users')
             ->select()
-            ->where('status', '=', 1)
+            ->where('username', '=', 'user')
             ->getAll();
 //        $response->view('about', new ViewModel([
 //            'users' => $users

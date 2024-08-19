@@ -10,7 +10,7 @@ learning the fundamentals of web application architecture.
 - [x] **Routing System**: Routing System: A modern routing system that leverages PHP 8's attribute annotations 
 for mapping URLs to controller actions. This approach eliminates the need for external route registration files, 
 allowing you to define routes directly within your controller methods. For example:
-```
+```php
 #[Route('/about', 'GET')]
 public function getAbout(HttpRequest $request, HttpResponse $response)
 {
@@ -19,7 +19,7 @@ public function getAbout(HttpRequest $request, HttpResponse $response)
 ```
 - [x] **Query Builder**: Introducing *Burt*, a convenient and intuitive query builder for streamlined database 
 interactions. With *Burt*, you can easily construct complex queries in a clean and readable manner. For example:
-```
+```php
 $users = Burt::table('users')
     ->select()
     ->where('status', '=', 1)
@@ -71,7 +71,7 @@ To get started with the framework, follow these steps:
 
 1. Set Up Environment Variables:
 * Copy the example environment file to create your own `.env` file:
-```
+```bash
 cp .env.example .env
 ```
 * Review the `.env` file and update the settings as needed. Ensure the environment variables align with the 
@@ -79,28 +79,28 @@ configuration in your `docker-compose.yaml` file. You can adjust the values in e
 
 2. Install Dependencies:
 * The framework requires several PHP libraries to function correctly. Install these dependencies using Composer:
-```
+```bash
 composer install
 ```
 
 3. Build and Start the Docker Environment:
 * Use Docker Compose to build and start the development environment, which includes an Apache web server and 
 a MySQL database:
-```
+```bash
 docker-compose up --build
 ```
 
 4. Run Migrations:
 * To apply database migrations, you need to execute the migration commands inside the web server container:
-```
+```bash
 docker-compose exec webserver bash
 ```
 * Once inside the container, navigate to the gator directory:
-```
+```bash
 cd gator
 ```
 * Run the migrations to set up your database schema:
-```
+```bash
 php migrations.php migrate
 ```
 

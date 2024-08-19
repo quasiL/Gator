@@ -14,6 +14,7 @@
     "require": {
         "vlucas/phpdotenv": "^5.5",
         "ext-pdo": "*",
-        "guzzlehttp/psr7": "^2.7"
+        "guzzlehttp/psr7": "^2.7",
+        "delight-im/auth": "^8.3"
     }
 }
